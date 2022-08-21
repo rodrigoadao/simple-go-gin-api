@@ -1,16 +1,11 @@
 package main
 
-import "github.com/gin-gonic/gin"
-
-func GetAllStudents(c *gin.Context) {
-	c.JSON(200, gin.H{
-		"id":   "1",
-		"name": "Rodrigo Santos",
-	})
-}
+import (
+	"github.com/rodrigoadao/simple-go-gin-api/database"
+	"github.com/rodrigoadao/simple-go-gin-api/routes"
+)
 
 func main() {
-	r := gin.Default()
-	r.GET("/student", GetAllStudents)
-	r.Run()
+	database.ConnectDatabase()
+	routes.HandleRequests()
 }
