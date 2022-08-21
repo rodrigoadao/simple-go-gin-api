@@ -36,6 +36,13 @@ func CreateStudent(c *gin.Context) {
 		return
 	}
 
+	if err := models.ValidateStudentData(&student); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	database.DB.Create(&student)
 	c.JSON(http.StatusOK, student)
 }
@@ -61,11 +68,18 @@ func UpdateStudent(c *gin.Context) {
 		return
 	}
 
+	if err := models.ValidateStudentData(&student); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 	database.DB.Model(&student).UpdateColumns(student)
 	c.JSON(http.StatusOK, student)
 }
 
-func SearchStudentByCPF(c *gin.Context) {
+func GetStudentByCPF(c *gin.Context) {
 	var student models.Student
 	cpf := c.Param("cpf")
 	database.DB.Where(&models.Student{CPF: cpf}).First(&student)
